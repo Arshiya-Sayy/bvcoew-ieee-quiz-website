@@ -25,17 +25,19 @@ interface LeaderboardUser {
 
 export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
   const { user, session } = useAuth();
+  const targetTimeMs = new Date().getTime() + (5 * 24 * 60 * 60 * 1000); 
+
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [topUsers, setTopUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // IEEE Day countdown (October 7th, 2025)
+   // IEEE Day countdown (October 7th, 2025)
   useEffect(() => {
-    const ieeeDay = new Date('2025-10-07T00:00:00');
-    
     const updateCountdown = () => {
-      const now = new Date().getTime();
-      const distance = ieeeDay.getTime() - now;
+      const now = new Date();
+      const ieeeDay = new Date('2025-10-07T00:00:00');
+      
+      const distance = ieeeDay.getTime() - now.getTime();
 
       if (distance > 0) {
         setTimeLeft({
@@ -44,14 +46,27 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
           minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
           seconds: Math.floor((distance % (1000 * 60)) / 1000)
         });
+      } else {
+        // IEEE Day has passed - reset countdown to all zeros
+        setTimeLeft({
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0
+        });
       }
     };
 
+    // Update immediately
     updateCountdown();
+    
+    // Update every second
     const interval = setInterval(updateCountdown, 1000);
+    
+    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
-
+  
   // Fetch top 5 users for leaderboard preview
   useEffect(() => {
     const fetchTopUsers = async () => {

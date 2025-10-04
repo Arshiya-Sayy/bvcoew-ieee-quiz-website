@@ -6,6 +6,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useAuth } from '../App';
 
 export const AuthPage: React.FC = () => {
@@ -15,7 +16,8 @@ export const AuthPage: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    membershipType: ''
   });
 
   const { login, signup } = useAuth();
@@ -28,9 +30,9 @@ export const AuthPage: React.FC = () => {
       if (isLogin) {
         await login(formData.email, formData.password);
       } else {
-        await signup(formData.name, formData.email, formData.password);
+        await signup(formData.name, formData.email, formData.password, formData.membershipType);
         setIsLogin(true);
-        setFormData({ name: '', email: '', password: '' });
+        setFormData({ name: '', email: '', password: '', membershipType: '' });
       }
     } catch (error) {
       // Error is handled in the auth functions
@@ -181,6 +183,36 @@ export const AuthPage: React.FC = () => {
                         required={!isLogin}
                         className="bg-white/10 border-white/30 text-white placeholder-gray-400"
                       />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="membershipType" className="text-white">IEEE Membership Status</Label>
+                      <Select 
+                        value={formData.membershipType} 
+                        onValueChange={(value: any) => setFormData(prev => ({ ...prev, membershipType: value }))}
+                        required={!isLogin}
+                      >
+                        <SelectTrigger className="bg-white/10 border-white/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                          <SelectValue 
+                            placeholder="Select membership type" 
+                            className="text-gray-400"
+                          />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white/10 backdrop-blur-sm border-white/30 shadow-xl">
+                          <SelectItem 
+                            value="ieee-member" 
+                            className="text-white hover:bg-blue-600/50 focus:bg-blue-600 focus:text-white cursor-pointer transition-colors duration-200"
+                          >
+                            IEEE Member
+                          </SelectItem>
+                          <SelectItem 
+                            value="non-ieee-member" 
+                            className="text-white hover:bg-blue-600/50 focus:bg-blue-600 focus:text-white cursor-pointer transition-colors duration-200"
+                          >
+                            Non-IEEE Member
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </TabsContent>
 

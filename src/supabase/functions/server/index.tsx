@@ -1,15 +1,15 @@
-import { Hono } from "npm:hono";
-import { cors } from "npm:hono/cors";
-import { logger } from "npm:hono/logger";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { logger } from "hono/logger";
+import { createClient } from "@supabase/supabase-js";
 import * as kv from "./kv_store.tsx";
 
 const app = new Hono();
 
 // Initialize Supabase client
 const supabase = createClient(
-  Deno.env.get('SUPABASE_URL')!,
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+  import.meta.env.VITE_SUPABASE_URL!,
+  import.meta.env.VITE_SUPABASE_ANON_KEY!
 );
 
 // Enable logger
@@ -104,7 +104,7 @@ const quizQuestions = [
 // User signup endpoint
 app.post("/make-server-7f978717/auth/signup", async (c) => {
   try {
-    const { name, email, password } = await c.req.json();
+    const { name, email, password, membershipType } = await c.req.json();
     
     if (!name || !email || !password) {
       return c.json({ error: "Name, email, and password are required" }, 400);
@@ -129,6 +129,7 @@ app.post("/make-server-7f978717/auth/signup", async (c) => {
       id: data.user.id,
       name,
       email,
+      membershipType: membershipType || 'non-ieee-member',
       avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
       xp: 0,
       score: 0,
@@ -210,6 +211,48 @@ app.get("/make-server-7f978717/auth/user", async (c) => {
   }
 });
 
+// Check if user can take quiz today
+app.get("/make-server-7f978717/quiz/check-eligibility", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+    
+    if (!user?.id) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+
+    // Get user data to check last quiz attempt
+    const userData = await kv.get(`user:${user.id}`);
+    
+    if (!userData) {
+      return c.json({ error: "User data not found" }, 404);
+    }
+
+    // Check if user has attempted quiz today
+    if (userData.lastQuizAt) {
+      const lastQuizDate = new Date(userData.lastQuizAt);
+      const today = new Date();
+      
+      // Reset time to beginning of day for comparison
+      lastQuizDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+      
+      if (lastQuizDate.getTime() === today.getTime()) {
+        return c.json({ 
+          canTakeQuiz: false, 
+          message: "You have already attempted today's quiz. Please try again tomorrow.",
+          lastAttempt: userData.lastQuizAt
+        });
+      }
+    }
+
+    return c.json({ canTakeQuiz: true });
+  } catch (error) {
+    console.log("Quiz eligibility check error:", error);
+    return c.json({ error: "Internal server error" }, 500);
+  }
+});
+
 // Get quiz questions
 app.get("/make-server-7f978717/quiz/questions", async (c) => {
   try {
@@ -218,6 +261,24 @@ app.get("/make-server-7f978717/quiz/questions", async (c) => {
     
     if (!user?.id) {
       return c.json({ error: "Unauthorized" }, 401);
+    }
+
+    // Check if user can take quiz today
+    const userData = await kv.get(`user:${user.id}`);
+    
+    if (userData && userData.lastQuizAt) {
+      const lastQuizDate = new Date(userData.lastQuizAt);
+      const today = new Date();
+      
+      // Reset time to beginning of day for comparison
+      lastQuizDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+      
+      if (lastQuizDate.getTime() === today.getTime()) {
+        return c.json({ 
+          error: "You have already attempted today's quiz. Please try again tomorrow." 
+        }, 429);
+      }
     }
 
     // Return shuffled questions without correct answers

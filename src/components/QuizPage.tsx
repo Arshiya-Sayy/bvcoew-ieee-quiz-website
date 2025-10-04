@@ -8,7 +8,7 @@ import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useAuth } from '../App';
 import { projectId } from '../utils/supabase/info';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 
 interface QuizPageProps {
   setCurrentPage: (page: string) => void;
@@ -39,11 +39,33 @@ export const QuizPage: React.FC<QuizPageProps> = ({ setCurrentPage }) => {
   const [showResults, setShowResults] = useState(false);
   const [results, setResults] = useState<any>(null);
   const [energy, setEnergy] = useState(100);
+  const [canTakeQuiz, setCanTakeQuiz] = useState<boolean | null>(null);
+  const [eligibilityMessage, setEligibilityMessage] = useState<string>('');
 
-  // Fetch questions on component mount
+  // Check quiz eligibility and fetch questions on component mount
   useEffect(() => {
-    const fetchQuestions = async () => {
+    const checkEligibilityAndFetchQuestions = async () => {
       try {
+        // First check if user can take quiz today
+        const eligibilityResponse = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-7f978717/quiz/check-eligibility`, {
+          headers: {
+            'Authorization': `Bearer ${session?.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const eligibilityData = await eligibilityResponse.json();
+
+        if (!eligibilityData.canTakeQuiz) {
+          setCanTakeQuiz(false);
+          setEligibilityMessage(eligibilityData.message || 'You cannot take the quiz at this time.');
+          setLoading(false);
+          return;
+        }
+
+        setCanTakeQuiz(true);
+
+        // If eligible, fetch questions
         const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-7f978717/quiz/questions`, {
           headers: {
             'Authorization': `Bearer ${session?.access_token}`,
@@ -56,19 +78,25 @@ export const QuizPage: React.FC<QuizPageProps> = ({ setCurrentPage }) => {
           setQuestions(questionsData);
           setQuizStartTime(Date.now());
         } else {
-          toast.error('Failed to load quiz questions');
-          setCurrentPage('home');
+          const errorData = await response.json();
+          if (response.status === 429) {
+            setCanTakeQuiz(false);
+            setEligibilityMessage(errorData.error);
+          } else {
+            toast.error('Failed to load quiz questions');
+            setCurrentPage('home');
+          }
         }
       } catch (error) {
-        console.error('Error fetching questions:', error);
-        toast.error('Error loading quiz');
+        console.error('Error checking eligibility or fetching questions:', error);
+        toast.error('Failed to load quiz');
         setCurrentPage('home');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchQuestions();
+    checkEligibilityAndFetchQuestions();
   }, [session, setCurrentPage]);
 
   // Timer countdown
@@ -163,6 +191,101 @@ export const QuizPage: React.FC<QuizPageProps> = ({ setCurrentPage }) => {
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
         />
+      </div>
+    );
+  }
+
+  // Show restriction message if user cannot take quiz
+  if (canTakeQuiz === false) {
+    return (
+      <div className="min-h-screen pt-8 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-8">
+              <CardContent>
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 5, -5, 0]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="inline-block mb-6"
+                >
+                  <Clock className="w-20 h-20 text-orange-400" />
+                </motion.div>
+
+                <h1 className="text-4xl font-bold text-white mb-4">Daily Limit Reached</h1>
+                <p className="text-xl text-gray-300 mb-8">{eligibilityMessage}</p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="p-6 bg-gradient-to-br from-orange-500/20 to-red-600/20 rounded-lg border border-orange-500/30 mb-8"
+                >
+                  <div className="flex items-center justify-center space-x-3 mb-4">
+                    <Zap className="w-6 h-6 text-orange-400" />
+                    <span className="text-lg font-semibold text-white">Come Back Tomorrow!</span>
+                  </div>
+                  <p className="text-gray-300 text-center">
+                    The quiz resets daily at midnight. Return tomorrow for a new chance to improve your score and climb the leaderboard!
+                  </p>
+                </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="p-4 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg"
+                  >
+                    <Trophy className="w-8 h-8 text-blue-400 mx-auto mb-2" />
+                    <div className="text-white font-semibold text-center">Current XP</div>
+                    <div className="text-2xl font-bold text-blue-400 text-center">{user?.xp || 0}</div>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="p-4 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg"
+                  >
+                    <Star className="w-8 h-8 text-green-400 mx-auto mb-2" />
+                    <div className="text-white font-semibold text-center">Badges Earned</div>
+                    <div className="text-2xl font-bold text-green-400 text-center">{user?.badges?.length || 0}</div>
+                  </motion.div>
+                </div>
+
+                <div className="space-y-4">
+                  <Button
+                    onClick={() => setCurrentPage('leaderboard')}
+                    size="lg"
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 mr-4"
+                  >
+                    View Leaderboard
+                  </Button>
+                  <Button
+                    onClick={() => setCurrentPage('home')}
+                    variant="outline"
+                    size="lg"
+                    className="border-white/30 text-white hover:bg-white/10"
+                  >
+                    Back to Home
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
       </div>
     );
   }

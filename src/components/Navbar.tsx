@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Home, Brain, Trophy, Mail, LogOut, Zap, User } from 'lucide-react';
+import { Home, Brain, Trophy, Mail, LogOut, Zap, User, Users } from 'lucide-react';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
@@ -18,6 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage }) =
     { id: 'home', label: 'Home', icon: Home },
     { id: 'quiz', label: 'Quiz', icon: Brain },
     { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
+    { id: 'team', label: 'Our Team', icon: Users },
     { id: 'contact', label: 'Contact', icon: Mail },
   ];
 

@@ -25,13 +25,11 @@ interface LeaderboardUser {
 
 export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
   const { user, session } = useAuth();
-  const targetTimeMs = new Date().getTime() + (5 * 24 * 60 * 60 * 1000); 
-
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [topUsers, setTopUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
 
-   // IEEE Day countdown (October 7th, 2025)
+  // IEEE Day countdown (October 7th, 2025)
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
@@ -66,7 +64,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
-  
+
   // Fetch top 5 users for leaderboard preview
   useEffect(() => {
     const fetchTopUsers = async () => {
@@ -92,7 +90,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
     };
 
     fetchTopUsers();
-  }, [session]);
+  }, [session?.access_token]);
 
   const timeBoxVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -120,7 +118,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
         >
           <div className="absolute inset-0 bg-black/30" />
           <ImageWithFallback
-            src="https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxJRUVFJTIwZWxlY3Ryb25pY3MlMjBlbmdpbmVlcmluZyUyMHRlY2hub2xvZ3l8ZW58MXx8fHwxNzU5Mzg1Mzc0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+            src="/IEEE Background image.jpg"
             alt="IEEE Technology"
             className="absolute inset-0 w-full h-full object-cover opacity-30"
           />
@@ -342,6 +340,47 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
           </motion.div>
         </div>
       </div>
+
+      {/* Footer with Logos */}
+      <footer className="mt-16 py-8 border-t border-white/10">
+        <div className="container mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="flex flex-col items-center"
+          >
+            <div className="flex items-center justify-center space-x-8 mb-4">
+              {/* College Logo Placeholder */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                <ImageWithFallback
+                  src="/placeholder-college-logo.png"
+                  alt="BVCOEW College Logo"
+                  className="h-16 w-auto object-contain"
+                />
+              </div>
+              
+              {/* IEEE Student Branch Logo Placeholder */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                <ImageWithFallback
+                  src="/placeholder-ieee-logo.png"
+                  alt="IEEE Student Branch BVCOEW Logo"
+                  className="h-16 w-auto object-contain"
+                />
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <p className="text-gray-300 text-sm">
+                Organized by IEEE Student Branch BVCOEW
+              </p>
+              <p className="text-gray-400 text-xs mt-1">
+                Bharati Vidyapeeth College of Engineering for Women
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </footer>
     </div>
   );
 };

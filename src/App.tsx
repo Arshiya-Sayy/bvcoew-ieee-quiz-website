@@ -1,12 +1,13 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { motion, AnimatePresence } from 'motion/react';
-import { toast, Toaster } from 'sonner@2.0.3';
+import { toast, Toaster } from 'sonner';
 import { AuthPage } from './components/AuthPage';
 import { HomePage } from './components/HomePage';
 import { QuizPage } from './components/QuizPage';
 import { LeaderboardPage } from './components/LeaderboardPage';
 import { ContactPage } from './components/ContactPage';
+import { TeamPage } from './components/TeamPage';
 import { Navbar } from './components/Navbar';
 import { projectId, publicAnonKey } from './utils/supabase/info';
 
@@ -32,7 +33,7 @@ interface AuthContextType {
   session: any;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  signup: (name: string, email: string, password: string, membershipType?: string) => Promise<void>;
   logout: () => Promise<void>;
   updateUser: (userData: User) => void;
 }
@@ -118,7 +119,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     }
   };
 
-  const signup = async (name: string, email: string, password: string) => {
+  const signup = async (name: string, email: string, password: string, membershipType?: string) => {
     try {
       const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-7f978717/auth/signup`, {
         method: 'POST',
@@ -126,7 +127,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
           'Authorization': `Bearer ${publicAnonKey}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, email, password, membershipType })
       });
 
       const data = await response.json();
@@ -214,6 +215,7 @@ const AppContent: React.FC<{ currentPage: string; setCurrentPage: (page: string)
           {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
           {currentPage === 'quiz' && <QuizPage setCurrentPage={setCurrentPage} />}
           {currentPage === 'leaderboard' && <LeaderboardPage />}
+          {currentPage === 'team' && <TeamPage />}
           {currentPage === 'contact' && <ContactPage />}
         </motion.div>
       </AnimatePresence>

@@ -354,7 +354,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
               {/* College Logo Placeholder */}
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
                 <ImageWithFallback
-                  src="/placeholder-college-logo.png"
+                  src="/BVCOEW Logo.jpeg"
                   alt="BVCOEW College Logo"
                   className="h-16 w-auto object-contain"
                 />
@@ -363,7 +363,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
               {/* IEEE Student Branch Logo Placeholder */}
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
                 <ImageWithFallback
-                  src="/placeholder-ieee-logo.png"
+                  src="/Student Branch Logo.jpeg"
                   alt="IEEE Student Branch BVCOEW Logo"
                   className="h-16 w-auto object-contain"
                 />

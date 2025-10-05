@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Mail, Send, MessageCircle, CheckCircle, User, AtSign } from 'lucide-react';
+import { Mail, Send, MessageCircle, CheckCircle, User, AtSign, Instagram, Linkedin } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -8,7 +8,7 @@ import { Textarea } from './ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { useAuth } from '../App';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 
 export const ContactPage: React.FC = () => {
   const { user } = useAuth();
@@ -288,6 +288,102 @@ export const ContactPage: React.FC = () => {
             </Card>
           </motion.div>
         </div>
+
+        {/* Follow Us Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-16"
+        >
+          <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+            <CardContent className="p-8">
+              <div className="text-center">
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  Connect <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">With Us</span>
+                </h2>
+                <p className="text-gray-300 text-lg mb-8">
+                  Follow our IEEE Student Branch for updates, events, and tech insights!
+                </p>
+                
+                {/* Social Media Icons */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
+                  {/* Instagram */}
+                  <motion.a
+                    href="https://www.instagram.com/ieee_bvcoew?igsh=MWwwaWR2cThpcHl4dg=="
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex flex-col items-center space-y-3 p-6 rounded-xl bg-gradient-to-br from-pink-500/10 to-purple-500/10 border border-pink-400/20 hover:border-pink-400/40 transition-all duration-300 w-48 sm:w-auto"
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <div className="relative">
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300"
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                        }}
+                        transition={{ 
+                          duration: 2, 
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                      <div className="relative p-4 bg-gradient-to-br from-pink-500/20 to-purple-500/20 rounded-full border border-pink-400/30 group-hover:border-pink-400/60 transition-all duration-300">
+                        <Instagram className="w-8 h-8 text-pink-400 group-hover:text-pink-300 transition-colors duration-300" />
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <h3 className="font-semibold text-white group-hover:text-pink-300 transition-colors duration-300">Instagram</h3>
+                      <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">@ieee_studentbranch</p>
+                    </div>
+                  </motion.a>
+
+                  {/* LinkedIn */}
+                  <motion.a
+                    href="https://www.linkedin.com/in/bvcoew-ieee-student-branch-092983383?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex flex-col items-center space-y-3 p-6 rounded-xl bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-400/20 hover:border-blue-400/40 transition-all duration-300 w-48 sm:w-auto"
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <div className="relative">
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300"
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                        }}
+                        transition={{ 
+                          duration: 2, 
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 1
+                        }}
+                      />
+                      <div className="relative p-4 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full border border-blue-400/30 group-hover:border-blue-400/60 transition-all duration-300">
+                        <Linkedin className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" />
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <h3 className="font-semibold text-white group-hover:text-blue-300 transition-colors duration-300">LinkedIn</h3>
+                      <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">IEEE Student Branch</p>
+                    </div>
+                  </motion.a>
+                </div>
+
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="text-gray-400 text-sm mt-8"
+                >
+                  Stay connected for the latest IEEE updates, tech news, and community events!
+                </motion.p>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Animated Background Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">

@@ -22,33 +22,33 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     id: '1',
-    name: 'Your Name Here',
+    name: 'Arshiya Nissar Sayyed',
     role: 'Website Developer',
-    photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=developer',
+    photo: '/AS.jpeg',
     description: 'Full-stack developer passionate about creating engaging web experiences',
     skills: ['React', 'TypeScript', 'Node.js', 'Supabase']
   },
   {
     id: '2',
-    name: 'Team Member 2',
+    name: 'Swarali Gosavi',
     role: 'Quiz Question Setter',
-    photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=quiz-setter',
+    photo: '/SG.jpeg',
     description: 'IEEE expert responsible for crafting challenging and educational quiz questions',
     skills: ['IEEE Standards', 'Content Creation', 'Technical Writing']
   },
   {
     id: '3',
-    name: 'Team Member 3',
-    role: 'UI/UX Designer',
-    photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=designer',
+    name: 'Preeti Birajdar',
+    role: 'Quiz Question Setter',
+    photo: '/PB.jpeg',
     description: 'Creative designer focused on user experience and visual aesthetics',
     skills: ['Figma', 'Design Systems', 'User Research', 'Prototyping']
   },
   {
     id: '4',
-    name: 'Team Member 4',
-    role: 'Project Manager',
-    photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=manager',
+    name: 'Ameya Nimkar',
+    role: 'Quiz Question Setter',
+    photo: '/AN.jpeg',
     description: 'Coordinating team efforts and ensuring project success',
     skills: ['Project Planning', 'Team Leadership', 'Quality Assurance']
   }

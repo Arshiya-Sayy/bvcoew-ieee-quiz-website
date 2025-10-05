@@ -62,7 +62,7 @@
       },
       "scripts": {
             "dev": "vite",
-            "build": "npm exec -- vite build",
+            "build": "vite build",
             "preview": "vite preview",
             "postinstall": "chmod +x node_modules/.bin/vite && npm rebuild"
       }

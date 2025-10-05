@@ -114,7 +114,10 @@ app.post("/make-server-7f978717/auth/signup", async (c) => {
     const { data, error } = await supabase.auth.admin.createUser({
       email,
       password,
-      user_metadata: { name },
+      user_metadata: { 
+        name,
+        ieee_status: membershipType || 'non-ieee-member'
+      },
       // Automatically confirm the user's email since an email server hasn't been configured
       email_confirm: true
     });
@@ -129,7 +132,7 @@ app.post("/make-server-7f978717/auth/signup", async (c) => {
       id: data.user.id,
       name,
       email,
-      membershipType: membershipType || 'non-ieee-member',
+      ieee_status: membershipType || 'non-ieee-member',
       avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
       xp: 0,
       score: 0,

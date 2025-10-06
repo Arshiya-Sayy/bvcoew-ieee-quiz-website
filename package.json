@@ -64,7 +64,6 @@
       "scripts": {
             "dev": "vite",
             "build": "node --loader ts-node/esm ./node_modules/vite/bin/vite.js build || node ./node_modules/vite/bin/vite.js build",
-            "preview": "vite preview",
-            "postinstall": "npm rebuild"
+            "preview": "vite preview"
       }
 }

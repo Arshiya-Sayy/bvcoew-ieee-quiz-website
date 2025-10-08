@@ -31,71 +31,71 @@ app.use(
 const quizQuestions = [
   {
     id: 1,
-    question: "What does IEEE stand for?",
-    options: ["Institute of Electrical and Electronics Engineers", "International Electrical Engineers", "Institute of Electronic Engineers", "International Electronics Engineers"],
-    correctAnswer: 0,
+    question: "Which country recently launched the Artemis II mission, aiming to send astronauts around the Moon?",
+    options: ["China", "USA", "Russia", "India"],
+    correctAnswer: 1,
     points: 10
   },
   {
     id: 2,
-    question: "When was IEEE founded?",
-    options: ["1963", "1884", "1950", "1975"],
-    correctAnswer: 0,
+    question: "What is the name of the AI model developed by OpenAI that continues to revolutionize natural language processing?",
+    options: ["ChatGPT", "BERT", "GPT-4", "Claude"],
+    correctAnswer: 2,
     points: 10
   },
   {
     id: 3,
-    question: "What is the IEEE motto?",
-    options: ["Advancing Technology for Humanity", "Engineering the Future", "Innovation Through Technology", "Technology for All"],
-    correctAnswer: 0,
+    question: "Which global event took place in 2025 to promote climate action and sustainability?",
+    options: ["COP30", "Earth Summit", "Expo 2025", "World Climate Conference"],
+    correctAnswer: 2,
     points: 10
   },
   {
     id: 4,
-    question: "How many IEEE members are there worldwide approximately?",
-    options: ["200,000", "300,000", "400,000", "500,000"],
+    question: "What is the primary goal of the United Nations' Sustainable Development Goals (SDGs) targeted for 2030?",
+    options: ["Space exploration", "Digital transformation", "Eradication of poverty and climate action", "Global trade expansion"],
     correctAnswer: 2,
     points: 10
   },
   {
     id: 5,
-    question: "What is IEEE's most cited publication?",
-    options: ["IEEE Spectrum", "IEEE Transactions", "IEEE Computer", "IEEE Communications"],
-    correctAnswer: 1,
+    question: "Which country recently became the first to approve a nationwide digital currency as its legal tender?",
+    options: ["China", "Sweden", "El Salvador", "Estonia"],
+    correctAnswer: 2,
     points: 10
   },
   {
     id: 6,
-    question: "In how many countries does IEEE operate?",
-    options: ["150+", "160+", "170+", "180+"],
+    question: "What is the name of the latest global health initiative launched to combat pandemics and future health crises?",
+    options: ["Global Health Security", "World Health Alliance", "Pandemic Prevention Network", "International Health Coalition"],
     correctAnswer: 2,
     points: 10
   },
   {
     id: 7,
-    question: "What does IEEE Day celebrate?",
-    options: ["First IEEE meeting", "First telegraph message", "IEEE founding", "First electrical patent"],
-    correctAnswer: 1,
+    question: "Which renewable energy source saw the largest global investment increase in 2024?",
+    options: ["Wind", "Solar", "Hydro", "Geothermal"],
+    correctAnswer: 0,
     points: 10
   },
   {
     id: 8,
-    question: "Which IEEE standard defines Ethernet?",
-    options: ["802.3", "802.11", "802.15", "802.16"],
-    correctAnswer: 0,
+    question: "What major technology company announced the development of a quantum computer with over 1,000 qubits?",
+    options: ["Google", "Microsoft", "Intel", "IBM"],
+    correctAnswer: 3,
     points: 15
   },
   {
     id: 9,
-    question: "What is IEEE's vision?",
-    options: ["Engineering Excellence", "Global Technology Leadership", "IEEE will be essential to the global technical community", "Innovation for Tomorrow"],
-    correctAnswer: 2,
+    question: "Which international organization celebrated its 80th anniversary in 2025?",
+    options: ["NATO", "WHO", "World Bank", "United Nations"],
+    correctAnswer: 3,
     points: 15
   },
   {
     id: 10,
-    question: "Which programming language was developed by IEEE member?",
-    options: ["Java", "Python", "C++", "JavaScript"],
+    question: "What global sporting event was hosted by Paris in 2024?",
+    options: ["World Cup", "Winter Olympics", "Summer Olympics", "Commonwealth Games"],
     correctAnswer: 2,
     points: 15
   }
